@@ -29,6 +29,8 @@ button{cursor:pointer}
 button:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 .screen{height:100%;overflow-y:auto}
+.screen,.log,.dock{scrollbar-width:none}
+.screen::-webkit-scrollbar,.log::-webkit-scrollbar,.dock::-webkit-scrollbar{display:none}
 .wrap{max-width:480px;margin:0 auto;padding-inline:16px}
 
 /* Intro */
@@ -81,7 +83,9 @@ button:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outl
 .chapter .care{color:var(--ink);background:var(--soft);border-radius:10px;padding:8px 12px;font-size:14px}
 
 .pin{border-top:1px solid var(--line);padding-block:10px 4px}
-.carry{border-top:1px dashed var(--line);padding-block:8px 0;font-size:12px;color:var(--muted);letter-spacing:.02em}
+.carry{border-top:1px dashed var(--line);padding-block:8px 0;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.carry-k{font-size:12px;color:var(--muted);letter-spacing:.04em;margin-right:2px}
+.carry-tag{font-size:12px;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:999px;padding:2px 10px}
 .carry:not([hidden]) + .pin{border-top:0}
 .thread{border-color:var(--accent)}
 .times{display:grid;gap:12px}
@@ -96,7 +100,8 @@ button:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outl
 .choice.quiet{border-style:dashed;color:var(--muted)}
 .choice.go{background:var(--accent);color:var(--on-accent);border-color:var(--accent);text-align:center;font-weight:500}
 .q{margin:0 0 8px;font-size:14px}
-.dots{display:flex;justify-content:space-between;gap:4px}
+.dots{display:flex;justify-content:center;gap:10px}
+.ends{max-width:280px;margin-inline:auto}
 .dot{width:48px;height:48px;border:0;background:transparent;display:grid;place-items:center;border-radius:50%}
 .dot::before{content:"";width:var(--s);height:var(--s);border-radius:50%;background:var(--soft);border:1.5px solid var(--accent);transition:background .15s}
 .dot:hover::before{background:var(--accent)}
@@ -148,33 +153,28 @@ details ul{margin:10px 0 0;padding-left:1.2em;display:grid;gap:8px;font-size:14p
 @keyframes drift-a{to{rotate:4deg;translate:14px -18px}}
 @keyframes drift-b{to{rotate:-2deg;translate:-14px 18px}}
 .intro:not(.go) .drawn,.intro:not(.go) .fig{animation-play-state:paused}
-.title-mark{position:relative;align-self:flex-start;padding-inline:.1em}
-.title-mark .circ{position:absolute;left:-10%;top:-58%;width:120%;height:216%;opacity:.38;object-fit:fill}
-.title-mark h1{position:relative}
+/* the hand-lettered title surfaces first; the prologue follows once it has settled */
+.intro .logotype{margin:0 0 24px;width:min(100%,400px)}
+.intro .logotype img{width:100%;display:block}
+.intro .wrap > *{animation:rise .9s ease-out both}
+.intro .wrap > .logotype{animation:surface 2.4s ease-out both}
+.intro .wrap > :nth-child(1){animation-delay:2.2s}
+.intro .wrap > :nth-child(3){animation-delay:2.4s}
+.intro .wrap > :nth-child(4){animation-delay:2.8s}
+.intro .wrap > :nth-child(5){animation-delay:3.2s}
+.intro .wrap > :nth-child(6){animation-delay:3.6s}
+.intro:not(.go) .wrap > *{animation-play-state:paused}
+@keyframes surface{from{opacity:0;filter:blur(8px)}to{opacity:1;filter:blur(0)}}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-/* chapters: the scene number sits inside a crayon circle */
-.ring{position:relative;width:60px;height:60px;display:grid;place-items:center;font-family:var(--serif);font-size:24px;font-weight:700;margin-bottom:2px}
-.ring img{position:absolute;inset:0;width:100%;height:100%;opacity:.75}
+/* illustrations: the artist's drawings sit in the conversation like pages of a sketchbook */
+.chapter .cover{width:min(100%,280px);justify-self:center;margin-bottom:10px;animation:pop .5s ease-out}
+.pic{margin:10px 0;align-self:center;width:min(80%,300px);animation:pop .5s ease-out}
+.pic img{width:100%}
+.pic.motif{width:min(48%,170px)}
+.verdict{padding-block:10px}
 
-/* looping: a tangle grows behind the conversation each round and clears when the problem closes */
-.app{position:relative}
-.app > :not(.tangle-bg){position:relative;z-index:1}
-.tangle-bg{position:absolute;z-index:0;left:50%;top:44%;width:min(80%,360px);translate:-50% -50%;
-  opacity:calc(var(--fade) * .5);scale:calc(.5 + var(--fade) * .9);rotate:calc(var(--fade) * 50deg);
-  transition:opacity 1.4s,scale 1.8s,rotate 1.8s}
-.pin small{display:flex;align-items:center;gap:6px}
-.pin-mark{width:16px;height:16px;opacity:.7}
-
-/* endings: closed problems are circled, open ones leave a tangle behind the words */
-.verdict{position:relative;isolation:isolate;padding-block:14px}
-.verdict .mark{position:absolute;z-index:-1;left:50%;top:50%;translate:-50% -50%}
-.verdict .m-circle{width:min(108%,340px);height:190%;object-fit:fill;opacity:.38}
-.verdict .m-tangle{width:120px;height:120px;opacity:.16}
-.verdict .m-small{width:58px;height:58px;left:auto;right:2%;top:12%;translate:none;opacity:.35}
-
-/* mirror: each ending carries its mark; the close returns to the two figures inside the circle */
-.chip{display:inline-flex;align-items:center;gap:6px}
-.chip img{width:14px;height:14px}
+/* mirror: the close returns to the two figures inside the circle */
 .finale{position:relative;width:min(260px,70vw);aspect-ratio:1;max-width:100%;justify-self:center;margin-top:8px}
 .finale img{position:absolute}
 .finale .f-circle{inset:0;width:100%;height:100%;opacity:.7}
@@ -191,6 +191,72 @@ details ul{margin:10px 0 0;padding-left:1.2em;display:grid;gap:8px;font-size:14p
 .film-btn:focus-visible,.film-play:focus-visible{outline:2px solid #1A1A1A;outline-offset:2px}
 @media (max-aspect-ratio: 9/16){.film video{object-fit:cover}}
 
+/* other paths, shown at each chapter's end */
+.others{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;gap:6px;margin-top:8px;animation:pop .35s ease-out}
+.others .h{font-size:12px;color:var(--muted);letter-spacing:.06em}
+.others ul{margin:0;padding-left:1.2em;display:grid;gap:4px;font-size:14px}
+.others .note{margin:0;font-size:12px;color:var(--muted)}
+
+/* results: four places */
+.zones{gap:0}
+.zones > .meta{margin-bottom:6px}
+.zone{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;padding-block:12px;border-top:1px solid var(--line)}
+.zone.empty{opacity:.5}
+.zone-body{display:grid;gap:4px;min-width:0}
+.zone-body p{margin:0}
+.zone{align-items:center}
+.face-box{width:68px;height:68px;display:grid;place-items:center}
+.face-box img{width:var(--w);height:auto}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.tag{font-size:13px;background:var(--soft);border-radius:999px;padding:2px 10px}
+.none{font-size:12px;color:var(--muted)}
+
+/* results: weights side by side */
+.minis{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:14px 12px}
+.mini{display:grid;gap:3px;min-width:0}
+.mini-t{font-size:12px;font-weight:500}
+.mini-v{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+svg.mini-c{width:100%;height:auto;display:block}
+.observes{display:grid;gap:6px;border-top:1px solid var(--line);padding-top:12px}
+.observe{font-family:var(--serif);font-size:16px;line-height:1.7}
+
+/* results: this time's shape */
+.pattern{gap:14px}
+.pat-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,42%);align-items:center;gap:12px}
+.pat-left{display:grid;gap:18px;min-width:0}
+.pat-title{display:grid;gap:2px;min-width:0}
+.pat-k{font-size:13px;color:var(--muted)}
+.pat-name{font-family:var(--serif);font-size:clamp(24px,7vw,32px);line-height:1.3}
+.pat-face{width:100%;max-height:260px;object-fit:contain}
+.pat-ev{margin:0;padding-left:1.2em;display:grid;gap:4px;font-size:14px}
+.pat-two{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.pat-two > div{background:var(--bg);border-radius:12px;padding:12px;display:grid;gap:4px;min-width:0}
+.pat-two p{margin:0;font-size:14px}
+.pat-h{font-size:12px;color:var(--muted);letter-spacing:.04em}
+.pat-also{font-size:14px;color:var(--muted)}
+.pat-q{background:var(--accent);color:var(--on-accent);border-radius:14px;padding:14px 16px;display:grid;gap:4px}
+.pat-q span{font-size:12px;opacity:.75;letter-spacing:.04em}
+.pat-q p{margin:0;font-family:var(--serif);font-size:18px;font-weight:700;line-height:1.5}
+.peers .peers-line{font-family:var(--serif);font-size:16px;line-height:1.7}
+.peer-bars{display:grid;gap:6px}
+.peer-row{display:grid;grid-template-columns:minmax(0,9em) 1fr auto;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.peer-row.me{color:var(--ink);font-weight:700}
+.pr-bar{height:6px;background:var(--soft);border-radius:3px;overflow:hidden}
+.pr-bar i{display:block;height:100%;background:var(--muted)}
+.peer-row.me .pr-bar i{background:var(--accent)}
+.pr-n{font-variant-numeric:tabular-nums}
+
+/* results: an easy-going player */
+.easy p{margin:0}
+.mini-scale{font-size:11px;color:var(--muted)}
+.more{display:grid;gap:14px}
+
+.said{display:grid;gap:12px}
+.share textarea{width:100%;min-height:120px;resize:vertical;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:13px}
+.share-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.copy{background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:999px;padding:7px 18px}
+details.each > .cards{margin-top:12px}
+
 @keyframes pop{from{transform:translateY(4px);opacity:0}to{transform:none;opacity:1}}
 @keyframes drop{from{transform:translateY(-10px);opacity:0}to{transform:none;opacity:1}}
 @keyframes blink{0%,100%{opacity:.3}50%{opacity:1}}
@@ -199,8 +265,6 @@ details ul{margin:10px 0 0;padding-left:1.2em;display:grid;gap:8px;font-size:14p
 
 <div class="film" id="film">
   <video id="filmVideo" src="intro.mp4" poster="poster.jpg" muted playsinline preload="auto" aria-label="開場影片：兩個人被捲進一個漩渦"></video>
-  <button class="film-play" id="filmPlay" type="button" hidden>播放</button>
-  <button class="film-play film-start" id="filmStart" type="button" hidden>開始</button>
   <button class="film-btn" id="filmSkip" type="button">略過</button>
 </div>
 
@@ -209,24 +273,23 @@ details ul{margin:10px 0 0;padding-left:1.2em;display:grid;gap:8px;font-size:14p
   <img class="art fig fig-b" src="art/figure-b.webp" alt="" aria-hidden="true">
   <div class="wrap">
     <p class="small">一件關於面對問題的互動作品</p>
-    <div class="title-mark"><img class="art circ drawn" src="art/circle.webp" alt="" aria-hidden="true"><h1>社會情緒訓練</h1></div>
+    <h1 class="logotype"><img class="art" src="art/logotype.webp" alt="社會情緒訓練 Social and Emotional Training"></h1>
     <p class="lede">有些問題可以分析、解決，然後就過去了。有些問題沒有答案，我們反覆去想，久了會習慣，可是它一直都在。</p>
     <p>這是一個大四學生的一個學期，從九月走到隔年二月。有些事處理完就過去了；有一個問題會反覆回來，每次回來，身邊的情況和你考慮的事都不太一樣。你不會事先知道哪些問題有解，只能邊走邊判斷。</p>
-    <p class="small">約 15 分鐘，六章加一段尾聲。故事裡有一條線和家人生病有關，可以從一開始就略過，走到那裡時也可以略過。最後只會呈現你走過的路，不會替你下結論。</p>
+    <p class="small">約 8 分鐘，五章加一段尾聲。故事裡有一條線和家人生病有關，可以從一開始就略過，走到那裡時也可以略過。最後只會呈現你走過的路，不會替你下結論。</p>
     <div class="starts"><button class="btn" id="startBtn" type="button">下一頁</button><button class="btn-quiet" id="startSkipBtn" type="button">下一頁，略過家人生病的情節</button></div>
   </div>
 </section>
 
 <section class="screen" id="appScreen" hidden>
   <div class="app">
-    <img class="art tangle-bg" src="art/tangle.webp" alt="" aria-hidden="true">
     <div class="top">
       <div><div class="work">社會情緒訓練</div><div class="name" id="sceneName"></div></div>
       <div class="steps" id="steps"></div>
     </div>
     <div class="log" id="log" aria-live="polite"></div>
     <div class="carry" id="carry" hidden></div>
-    <div class="pin" id="pin" hidden><small><img class="art pin-mark" src="art/tangle.webp" alt="" aria-hidden="true">還沒有答案的問題</small><p id="pinText"></p></div>
+    <div class="pin" id="pin" hidden><small>還沒有答案的問題</small><p id="pinText"></p></div>
     <div class="dock" id="dock"></div>
   </div>
 </section>
@@ -238,7 +301,8 @@ details ul{margin:10px 0 0;padding-left:1.2em;display:grid;gap:8px;font-size:14p
 <script>
 const $ = s => document.querySelector(s);
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const sleep = ms => new Promise(r => setTimeout(r, RM ? 120 : ms));
+const SPEED = .75; /* lower = faster */
+const sleep = ms => new Promise(r => setTimeout(r, RM ? 120 : ms*SPEED));
 const log = $('#log'), dock = $('#dock'), pin = $('#pin'), pinText = $('#pinText');
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function el(tag, cls, html){ const e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
@@ -259,14 +323,11 @@ function render(m){
     case 'narr': e=el('p','narr',esc(m.t)); break;
     case 'think': e=el('p','think',esc(m.t)); break;
     case 'pick': e=el('div','pick','→ '+esc(m.t)); break;
-    case 'verdict': {
-      e=el('p','verdict',esc(m.t));
-      const marks={circle:[['circle','m-circle drawn']], tangle:[['tangle','m-tangle']], mixed:[['circle','m-circle drawn'],['tangle','m-small']]}[m.mark]||[];
-      marks.forEach(([src,cls])=>e.prepend(artImg(src,'mark '+cls)));
-      break; }
+    case 'verdict': e=el('p','verdict',esc(m.t)); break;
+    case 'pic': e=el('figure','pic'+(m.cls?' '+m.cls:'')); e.append(artImg(m.src)); break;
     case 'notice': e=el('div','notice'); e.append(el('span','src',esc(m.app))); e.append(el('strong','',esc(m.title))); e.append(el('span','',esc(m.t))); break;
     case 'chapter': e=el('div','chapter');
-      if(m.num){ const r=el('div','ring'); r.append(artImg('circle','drawn'), el('span','',m.num)); e.append(r); }
+      if(m.pic) e.append(artImg(m.pic,'cover'));
       e.append(el('span','n',esc(m.n))); e.append(el('h2','',esc(m.title))); e.append(el('p','',esc(m.t))); if(m.care) e.append(el('p','care',esc(m.care))); break;
     case 'weight': {
       e=el('div','sys weight'); e.append(el('span','','心裡的重量'));
@@ -283,7 +344,7 @@ async function draft(text){
   await sleep(300); d.remove();
   render({k:'sys', t:'（你把它刪掉了）'});
 }
-const GAP = {them:500, me:450, sys:500, stamp:700, narr:900, think:1000, notice:700, verdict:1100, pick:0, chapter:0};
+const GAP = {pic:700, them:500, me:450, sys:500, stamp:700, narr:900, think:1000, notice:700, verdict:1100, pick:0, chapter:0};
 async function play(list){
   for(const m of list){
     await sleep(m.d ?? GAP[m.k] ?? 600);
@@ -311,7 +372,27 @@ function choose(opts){
     dock.append(box);
   });
 }
-function rate(q){
+async function rate(q){
+  const v = await rateOnly(q);
+  if(cur.cope==null && !cur.noCope) await cope();
+  return v;
+}
+/* the second half of the appraisal: can I handle this? asked once per chapter */
+function cope(){
+  return new Promise(res=>{
+    dock.replaceChildren();
+    const w=el('div'); w.append(el('p','q','你覺得這件事，你處理得來嗎？'));
+    const box=el('div','choices');
+    Object.entries(COPE).forEach(([v,t])=>{
+      const b=el('button','choice',esc(t)); b.type='button';
+      b.onclick=()=>{ dock.replaceChildren(); cur.cope=+v; render({k:'pick', t}); res(+v); };
+      box.append(b);
+    });
+    w.append(box); dock.append(w);
+  });
+}
+const COPE = {1:'處理得來', 2:'有點麻煩，有點壓力', 3:'處理不來'};
+function rateOnly(q){
   return new Promise(res=>{
     dock.replaceChildren();
     const w=el('div'); w.append(el('p','q',esc(q || '現在，這件事在你心裡有多重？')));
@@ -350,6 +431,16 @@ const setFade = r => document.documentElement.style.setProperty('--fade', Math.m
 const setPin = t => { pinText.textContent=t; pin.hidden=false; if(typeof renderCarry==='function') renderCarry(); };
 const clearPin = () => { pin.hidden=true; if(typeof renderCarry==='function') renderCarry(); };
 
+/* ---------- other paths ---------- */
+async function showOthers(list){
+  await sleep(900);
+  const e=el('div','others');
+  const hd=el('span','h'); hd.textContent='其他人也可能這樣做'; e.append(hd);
+  const ul=el('ul'); list.forEach(t=>ul.append(el('li','',esc(t)))); e.append(ul);
+  e.append(el('p','note','沒有哪一條比較好，只是還有這些路。'));
+  log.append(e); log.scrollTop=log.scrollHeight;
+}
+
 /* ---------- shared pieces ---------- */
 async function endSolved(v){
   cur.ending='B'; setFade(0); clearPin();
@@ -385,7 +476,7 @@ const carryEl = document.getElementById('carry');
 function renderCarry(){
   const items = carried.filter(t => pin.hidden || t !== pinText.textContent);
   carryEl.hidden = !items.length;
-  carryEl.textContent = '還帶在身上：' + items.join('　·　');
+  carryEl.replaceChildren(el('span','carry-k','還帶在身上'), ...items.map(t=>el('span','carry-tag',esc(t))));
 }
 function carry(t){ if(!carried.includes(t)) carried.push(t); renderCarry(); }
 function drop(t){ const i=carried.indexOf(t); if(i>=0) carried.splice(i,1); renderCarry(); }
@@ -394,8 +485,8 @@ function drop(t){ const i=carried.indexOf(t); if(i>=0) carried.splice(i,1); rend
 async function sCourse(){
   await play([
     {k:'stamp', t:'加退選第一天 早上 9:00'},
-    {k:'narr', t:'大四上學期。你一定要修的必修「統計學（一）」，這學期不修，就得延畢。你打開選課系統：'},
-    {k:'sys', t:'統計學（一）　額滿　60／60'},
+    {k:'narr', t:'大四上學期。有一門大四才開的必修，這學期不修，就得延畢。你打開選課系統：'},
+    {k:'sys', t:'必修　額滿　60／60'},
     {k:'think', t:'這下完了。'}
   ]);
   await rate();
@@ -410,17 +501,17 @@ async function sCourse(){
     const v=await choose(opts);
     if(v==='mail'){
       await play([
-        {k:'notice', app:'Gmail', title:'Re：統計學（一）加簽申請', t:'王老師'},
+        {k:'notice', app:'Gmail', title:'Re：必修加簽申請', t:'王老師'},
         {k:'them', who:'王老師', t:'第一週來上課，下課找我簽加簽單就可以了。', type:1300},
         {k:'stamp', t:'週三 下午'},
         {k:'narr', t:'下課後，你拿到老師的簽名。'},
-        {k:'sys', t:'統計學（一）　已選上'}
+        {k:'sys', t:'必修　已選上'}
       ]);
       break;
     }
     if(v==='refresh'){
       refreshes++;
-      await play([{k:'sys', t:'統計學（一）　額滿　60／60'}]);
+      await play([{k:'sys', t:'必修　額滿　60／60'}]);
       if(refreshes===2){ await play([{k:'them', who:'隔壁的同學', t:'你可以寫信請老師加簽啊，我去年也是這樣'}]); opts=opts.filter(o=>o.v!=='refresh'); }
       continue;
     }
@@ -430,34 +521,19 @@ async function sCourse(){
   }
   await play([{k:'narr', t:'第一堂課，老師把全班分組。你和小芸、宇恩、阿哲、家豪同一組，期末要交一份報告。'}]);
   await endSolved();
-  if(!story.skipMom) await momFirst();
 }
 
-/* 去，還是留下？（第 1 次）：a light interruption inside chapter 1 */
-async function momFirst(){
-  results.push(cur);
-  cur={title:'那封面試邀請', month:'九月', mom:1, ratings:[], path:[], loops:0, ending:null, reason:null, reveal:null};
+/* 去，還是留下？ first appears at the end of September, as a quiet coda */
+async function momTeaser(){
   await play([
     {k:'stamp', t:'同一週 週四 晚上'},
     {k:'notice', app:'Gmail', title:'面試邀請｜儲備企劃 第一輪面試', t:'台北的那間公司'},
+    {k:'pic', src:'letter-meds'},
     {k:'narr', t:'那是你暑假投的履歷。這週一，媽媽剛確診慢性病，醫生說要定期回診、長期照顧。姊姊在高雄工作，你是家裡唯一住在附近的孩子。'},
     {k:'them', who:'媽媽', t:'面試就去啊，想那麼多幹嘛。'},
     {k:'think', t:'還只是面試而已。可是如果真的上了呢？'}
   ]);
-  setPin(PIN_MOM);
-  await rate();
-  const v = await choose([
-    {t:'先回覆面試時間，上了再說', v:'reply'},
-    {t:'查一下照顧這個病需要做什麼', v:'search'},
-    {t:'傳訊息問姊姊怎麼想', v:'sister'},
-    {t:'先不想，明天還有課', v:'later'}
-  ]);
-  if(v==='reply') await play([{k:'me', t:'您好，下週二上午可以，謝謝。'},{k:'narr', t:'信寄出去了。心裡那個問題沒有跟著寄出去。'}]);
-  if(v==='search') await play([{k:'narr', t:'三個月回診一次，飲食要控制，藥不能忘。你把這些記進手機備忘錄。'},{k:'think', t:'好像做得到。可是我人在台北的話呢？'}]);
-  if(v==='sister') await play([{k:'me', t:'姊，台北那間公司找我去面試'},{k:'them', who:'姊姊', t:'很好啊！媽那邊我們再一起想辦法', type:1200},{k:'think', t:'「我們」。可是住在附近的只有我。'}]);
-  if(v==='later') await play([{k:'narr', t:'你把手機蓋在桌上，打開統計學的講義。'}]);
-  clearPin(); carry(PIN_MOM);
-  cur.ending='T';
+  carry(PIN_MOM);
   await play([{k:'sys', t:'這個問題，你先放著了。'}]);
 }
 
@@ -517,7 +593,7 @@ async function sRead(){
     await play([{k:'narr', t:'你關了燈，躺了一個小時，又把手機拿起來。'}]);
   }
   const out = await loop({
-    pin:PIN_AN, rounds:3,
+    pin:PIN_AN, rounds:2,
     stamp:['晚上 11:58','凌晨 0:47','凌晨 2:13'],
     trig:r=>[
       [{k:'notice', app:'Instagram', title:'小安', t:'又新增了一則限時動態'}],
@@ -596,55 +672,11 @@ async function sMom2(){
     'M', '回診那天的事解決了。「去，還是留下」還在。');
 }
 
-/* ---------- 5. 十二月：the group report ---------- */
-async function sGroup(){
-  await play([
-    {k:'sys', t:'統計學期末報告 第三組（5 人）'},
-    {k:'stamp', t:'十二月 週三 晚上 9:00'},
-    {k:'narr', t:'報告週五早上要上台，你負責統整。阿哲和家豪到現在都沒交進度，傳訊息也不回。'},
-    {k:'them', who:'小芸', t:'老師說最後會看組員互評打分數喔'},
-    {k:'think', t:'他們兩個到底在幹嘛？'}
-  ]);
-  if(!story.skipMom) await play([
-    {k:'notice', app:'LINE', title:'媽媽', t:'禮拜六回診順便幫我拿藥，沒空也沒關係'},
-    {k:'think', t:'……先不想。'}
-  ]);
-  await rate();
-  let solved=null;
-  setPin('報告做得完嗎？');
-  for(let r=1;r<=3 && !solved;r++){
-    cur.loops=r; setFade(r);
-    if(r>1){
-      await play([{k:'stamp', t:['','週四 下午 2:00','週四 晚上 11:30'][r-1]}, ...[[],
-        [{k:'them', who:'小芸', t:'對不起……我今天打工，我的部分可能也來不及了'}],
-        [{k:'sys', t:'阿哲、家豪：已讀'}]][r-1],
-        {k:'think', t:['','怎麼連小芸也……','是不是只有我在乎這份報告？'][r-1]}]);
-      await rate();
-    }
-    const v = await choose([
-      {t:'再傳訊息催他們兩個', v:'push'},
-      {t:'在群組重新分工，請有回應的人分擔', v:'split'},
-      {t:'跟宇恩抱怨這件事', v:'vent'},
-      {t:'寫信跟老師說明狀況', v:'mail'},
-      {t:'自己把剩下的全部做完', v:'self'}
-    ]);
-    if(v==='push') await play([{k:'me', t:'明天中午前一定要給我喔'},
-      {k:'them', who:['阿哲','家豪','阿哲'][r-1], t:['抱歉我這週打工排很滿，明天弄','我以為是下週交……','好啦好啦'][r-1], type:1300},
-      {k:'think', t:'又是一個新的理由。'}]);
-    if(v==='vent') await play([{k:'me', t:'我真的快受不了他們了'},{k:'them', who:'宇恩', t:'我懂，超扯。可是罵完報告還是要交欸'}]);
-    if(v==='mail') await play([{k:'them', who:'老師', t:'先把報告完成，互評時如實填寫即可。', type:1300},{k:'think', t:'他們會不會覺得我在告狀？'}]);
-    if(v==='split'){ await play([{k:'me', t:'剩下的部分我重新分一下，宇恩可以幫忙第四章嗎？'},{k:'them', who:'宇恩', t:'可以，我今晚弄'},{k:'them', who:'小芸', t:'結論我來寫！'}]); solved='split'; }
-    if(v==='self'){ await play([{k:'narr', t:'你泡了一杯咖啡，把阿哲和家豪的部分也打開來寫。'}]); solved='self'; }
-  }
-  if(!solved) await play([{k:'narr', t:'凌晨三點，你把剩下的全部自己做完了。'}]);
-  await play([{k:'stamp', t:'週五 凌晨 2:40'},{k:'narr', t:'簡報存進隨身碟。早上 11 點上台。'}]);
-  await endSolved('報告做完了。');
-}
-
 /* ---------- 6. 十二月：the corrupted file → peer review (mixed) ---------- */
 async function sFile(){
   await play([
-    {k:'stamp', t:'週五 上午 10:05'},
+    {k:'stamp', t:'十二月 週五 上午 10:05'},
+    {k:'narr', t:'必修的期末報告。阿哲和家豪一直沒交進度，昨晚你把他們的部分也補完，凌晨兩點才存檔。'},
     {k:'narr', t:'11 點要上台。你把隨身碟插上教室電腦，簡報檔跳出一行字：'},
     {k:'sys', t:'「檔案已損毀，無法開啟」'},
     {k:'think', t:'完了。'}
@@ -702,12 +734,11 @@ async function sMom3(){
   ]);
   await rate();
   await loop({
-    pin:PIN_MOM, rounds:3,
-    stamp:['週二 晚上','週三 深夜','週四 凌晨'],
+    pin:PIN_MOM, rounds:2,
+    stamp:['週二 晚上','週四 凌晨'],
     trig:r=>[
       [{k:'narr', t:'媽媽在廚房洗碗，動作比九月的時候又慢了一點。'}],
-      [{k:'notice', app:'LINE', title:'媽媽', t:'明天回診，你有空載我嗎？沒空也沒關係'}],
-      [{k:'notice', app:'Gmail', title:'提醒：請於週五 17:00 前回覆是否接受錄取', t:'人資部'}]
+      [{k:'notice', app:'LINE', title:'媽媽', t:'明天回診，你有空載我嗎？沒空也沒關係'},{k:'notice', app:'Gmail', title:'提醒：請於週五 17:00 前回覆是否接受錄取', t:'人資部'}]
     ][r-1],
     thought:['她到底希望我怎麼做？','如果我走了，她出事怎麼辦？','為什麼偏偏是現在？'],
     opts:()=>[
@@ -755,7 +786,7 @@ async function sEnd(){
       {k:'think', t:'這樣算是……回了嗎？'}]);
   }
   await play([
-    {k:'notice', app:'LINE・統計學第三組', title:'阿哲', t:'成績出來了。這學期抱歉，拖累大家了'},
+    {k:'notice', app:'LINE・期末報告第三組', title:'阿哲', t:'成績出來了。這學期抱歉，拖累大家了'},
     {k:'think', t:'原來他也一直記得。'}]);
   drop('他們會不會知道是我？');
   if(!story.skipMom && story.decision){
@@ -777,14 +808,18 @@ async function sEnd(){
 
 /* ---------- flow ---------- */
 const CHAPTERS = [
-  {month:'九月',  title:'額滿的必修',   sub:'大四上學期的第一天。不修就要延畢的課，已經額滿了。', fn:sCourse},
-  {month:'十月',  title:'已讀的道歉',   sub:'你忘了小安生日聚餐的訂位，還怪到他頭上。', fn:sRead},
-  {month:'十一月',title:'同一天',       sub:'最終面試在台北，和媽媽回診排在同一天。', fn:sMom2, mom:2,
-    care:'這一章和下一次「去，還是留下？」都和家人生病有關。如果現在不適合，可以略過這條線。'},
-  {month:'十二月',title:'分組報告',     sub:'統計學的期末報告週五要上台，有兩個組員一直不回。', fn:sGroup},
-  {month:'十二月',title:'打不開的檔案', sub:'上台前一小時，簡報檔壞了。', fn:sFile},
-  {month:'一月',  title:'週五五點前',   sub:'錄取通知來了，要在週五下午五點前回覆。', fn:sMom3, mom:3},
-  {month:'二月',  title:'尾聲',         sub:'寒假的最後一週。', fn:sEnd}
+  {month:'九月',  title:'額滿的必修', pic:'course',   sub:'大四上學期的第一天。不修就要延畢的課，已經額滿了。', fn:sCourse, coda:momTeaser,
+    others:['到第一堂課現場，下課直接找老師','問學長姐，這門課通常怎麼加簽','查查看別班或進修部有沒有開同一門課']},
+  {month:'十月',  title:'已讀的道歉', pic:'phone',   sub:'你忘了小安生日聚餐的訂位，還怪到他頭上。', fn:sRead,
+    others:['約他當面聊，不只靠訊息','傳一個他會喜歡的東西，先不提吵架的事','決定給他幾天，先把注意力放回自己的生活']},
+  {month:'十一月',title:'同一天', pic:'calendar',       sub:'最終面試在台北，和媽媽回診排在同一天。', fn:sMom2, mom:2,
+    care:'這一章和下一次「去，還是留下？」都和家人生病有關。如果現在不適合，可以略過這條線。',
+    others:['請姊姊那天請假回來陪媽媽','先問醫院，回診能不能改到別天','把兩件事都告訴媽媽，請她一起想辦法']},
+  {month:'十二月',title:'打不開的檔案', sub:'上台前一小時，簡報檔壞了。', fn:sFile,
+    others:['平常就把檔案存在兩個地方','互評前，先私下問阿哲和家豪發生了什麼事','把想說的話寫在互評的文字欄，不只給分數']},
+  {month:'一月',  title:'週五五點前', pic:'kitchen',   sub:'錄取通知來了，要在週五下午五點前回覆。', fn:sMom3, mom:3,
+    others:['跟公司討論能不能遠端或彈性上班','找兄弟姊妹一起分擔照顧','先問醫生，需要照顧到什麼程度']},
+  {month:'二月',  title:'尾聲', pic:'balcony',         sub:'寒假的最後一週。', fn:sEnd}
 ];
 
 function show(id){ ['intro','appScreen','resultScreen'].forEach(s=>$('#'+s).hidden = s!==id); }
@@ -796,15 +831,15 @@ async function runAll(skipMom){
   let skipNoted=false;
   for(let i=0;i<N;i++){
     const sc=CHAPTERS[i];
-    cur={title:sc.title, month:sc.month, mom:sc.mom, ratings:[], path:[], loops:0, ending:null, reason:null, reveal:null};
+    cur={title:sc.title, month:sc.month, mom:sc.mom, ratings:[], path:[], loops:0, ending:null, reason:null, reveal:null, cope:null, noCope: sc.fn===sEnd};
     steps.querySelectorAll('i').forEach((d,j)=>d.classList.toggle('on', j<=i));
     if(sc.mom && story.skipMom){ if(!skipNoted){ cur.ending='S'; results.push(cur); skipNoted=true; } continue; }
     log.replaceChildren(); setFade(0); clearPin();
     $('#sceneName').textContent=`${sc.month}・${sc.title}`;
-    render({k:'chapter', num: sc.fn===sEnd ? '' : String(i+1), n: sc.fn===sEnd ? '尾聲' : `${sc.month}・第 ${i+1} 章，共 ${N-1} 章`, title:sc.title, t:sc.sub, care:sc.care});
+    render({k:'chapter', pic:sc.pic, n: sc.fn===sEnd ? '尾聲' : `${sc.month}・第 ${i+1} 章`, title:sc.title, t:sc.sub, care:sc.care});
     if(sc.mom) render({k:'sys', t:`「${PIN_MOM}」第 ${sc.mom} 次出現`});
     const go = await choose(sc.care ? [{t:'開始', v:1, cls:'go'},{t:'略過這條線', v:0, cls:'go'}] : [{t:'開始', v:1, cls:'go'}]);
-    if(go){ await sc.fn(); } else { cur.ending='S'; story.skipMom=true; skipNoted=true; drop(PIN_MOM); }
+    if(go){ await sc.fn(); if(sc.others) await showOthers(sc.others); if(sc.coda && !story.skipMom) await sc.coda(); } else { cur.ending='S'; story.skipMom=true; skipNoted=true; drop(PIN_MOM); }
     results.push(cur);
     if(go) await choose([{t: i<N-1 ? '下一章' : '看看你走過的路', v:1, cls:'go'}]);
   }
@@ -824,23 +859,217 @@ function curve(r, breaks){
 }
 const ENDING = {B:['問題結束了',''], T:['時間往前了，問題還在','dash'], M:['一部分過去了，一部分還在','dash'], S:['略過','mute'], E:['日子繼續','mute']};
 
+/* 其他人寫下的話
+   收集到同學的回答後，把他們停下來的理由加進這個清單，例如：
+   {ch:'十月・已讀的道歉', t:'我想他需要時間'},
+   清單是空的時候，結果頁不會出現這一區。 */
+const OTHERS_SAID = [
+];
+
+/* four places, from how much it weighed (its heaviest moment) and whether it felt manageable */
+const ZONES = [
+  {n:1, title:'不太在意，也處理得來',               t:'它沒有真的壓到你。'},
+  {n:2, title:'有點在意，但處理得來',               t:'佔了一點心思，但你知道下一步。'},
+  {n:3, title:'有點在意，處理起來也有點麻煩、有點壓力', t:'它會回來敲門，處理它要花力氣。'},
+  {n:4, title:'很在意，覺得處理不來',               t:'它很重，你也看不到能做什麼。'}
+];
+const peak = r => r.ratings.length ? Math.max(...r.ratings) : 0;
+const lastW = r => r.ratings[r.ratings.length-1];
+const label = r => `${r.month}・${r.title}`;
+const span = a => { const lo=Math.min(...a), hi=Math.max(...a); return lo===hi ? `${lo}` : `${lo} 到 ${hi}`; };
+const played = () => results.filter(r=>r.ending && r.ending!=='S' && r.ending!=='E' && r.ratings.length);
+function zoneOf(r){
+  const p=peak(r), c=r.cope||2;
+  if(c===1) return p<=2 ? 1 : 2;
+  if(c===2) return p<=2 ? 2 : 3;
+  return p<=2 ? 1 : p===3 ? 3 : 4;
+}
+
+function zoneCard(list){
+  const c=el('div','card zones');
+  c.append(el('h3','','這些問題，落在你心裡的哪裡'));
+  c.append(el('p','meta','依照你給的重量，和你覺得處理不處理得來。'));
+  ZONES.forEach(z=>{
+    const items=list.filter(r=>zoneOf(r)===z.n);
+    const row=el('div','zone'+(items.length?'':' empty'));
+    const lv=el('span','face-box'); const f=artImg('face-'+z.n); f.style.setProperty('--w', [64,58,66,48][z.n-1]+'px'); lv.append(f);
+    const body=el('div','zone-body');
+    body.append(el('strong','',esc(z.title)));
+    if(items.length){
+      body.append(el('p','meta',esc(z.t)));
+      const tags=el('div','tags'); items.forEach(r=>tags.append(el('span','tag',esc(label(r))))); body.append(tags);
+    }
+    row.append(lv, body); c.append(row);
+  });
+  return c;
+}
+
+function miniCurve(r){
+  const W=120,H=46,p=5, n=r.length, x=i=> n<2 ? W/2 : p+i*(W-2*p)/(n-1), y=v=> p+(5-v)*(H-2*p)/4;
+  let s=`<svg class="mini-c" viewBox="0 0 ${W} ${H}" aria-hidden="true">`;
+  [1,3,5].forEach(v=>{ s+=`<line x1="0" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/>`; });
+  s+=`<polyline fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linejoin="round" points="${r.map((v,i)=>x(i)+','+y(v)).join(' ')}"/>`;
+  r.forEach((v,i)=>{ const e=i===n-1; s+=`<circle cx="${x(i)}" cy="${y(v)}" r="${e?3.6:2.2}" fill="${e?'var(--accent)':'var(--surface)'}" stroke="var(--accent)" stroke-width="1.2"/>`; });
+  return s+'</svg>';
+}
+function describe(list){
+  const peaks=list.map(peak);
+  if(peaks.every(p=>p<=2)) return ['這些情境在你心裡似乎都不算太重。'];
+  const out=[];
+  const solved=list.filter(r=>r.ending==='B'), open=list.filter(r=>r.ending!=='B');
+  const fell = solved.every(r=>lastW(r)<peak(r)) ? '降到了' : '停在';
+  if(solved.length) out.push(`有解的問題，你的重量最後${fell} ${span(solved.map(lastW))}。`);
+  if(open.length) out.push(`還沒有答案的問題，它最後停在 ${span(open.map(lastW))}。`);
+  return out;
+}
+function weightCard(list){
+  const c=el('div','card');
+  c.append(el('h3','','每一章的重量'));
+  const grid=el('div','minis');
+  list.forEach(r=>{
+    const m=el('div','mini');
+    m.append(el('span','mini-t',esc(label(r))));
+    m.insertAdjacentHTML('beforeend', miniCurve(r.ratings));
+    grid.append(m);
+  });
+  c.append(grid);
+  c.append(el('div','mini-scale','<span>線越高，心裡越重</span>'));
+  const obs=el('div','observes'); describe(list).forEach(t=>obs.append(el('p','observe',esc(t)))); c.append(obs);
+  return c;
+}
+
+/* ---------- 這一次的樣子：five ways a run can look, read from the player's own choices ---------- */
+const PATTERNS = {
+  light: {name:'輕輕放過', face:1,
+    good:'很多人在這些情境裡會繞好幾圈、睡不著，你給的重量大多很輕。這不代表你不在乎，也許你只是比較快放下。日本作家渡邊淳一把這種特質叫做「鈍感力」。帶著這樣的自己，生活可以輕鬆很多。',
+    watch:'偶爾，身邊的人很在意的事，你可能會比較晚才發現。',
+    q:'有沒有哪件事，其實值得你多停一下？'},
+  act: {name:'先找路', face:2,
+    good:'問題一來，你會先找能做的事：寫信、去問、去試。有解的問題，在你手上通常不會拖太久。',
+    watch:'遇到怎麼做都沒有路的問題，可能會特別難受，因為「做點什麼」這一招不管用了。',
+    q:'如果這件事沒有辦法解決，你可以怎麼跟它相處？'},
+  heart: {name:'放在心上', face:3,
+    good:'這些事在你心裡都不輕。這通常代表你把身邊的人和事看得很重，也願意為它們費心。',
+    watch:'重量太多的時候，會分不清哪些是你該扛的，哪些其實不是。',
+    q:'這份重量裡，哪一部分是你的，哪一部分其實不是？'},
+  loop: {name:'在心裡繞圈', face:4,
+    good:'你會一遍一遍地想，想把事情弄清楚。這很常見，代表你很想要一個答案。',
+    watch:'有些問題越想越重。研究發現，把「為什麼會這樣」換成「下一步具體做什麼」，比較容易停下來。',
+    q:'如果現在只能做一件很小的事，會是什麼？'},
+  carry: {name:'有解的放下，沒解的帶著', face:3,
+    good:'有答案的問題，你處理完就放下了；沒有答案的，你沒有硬要解決它，而是先帶著繼續生活。',
+    watch:'帶著的東西不會自己消失，偶爾需要停下來看看它。',
+    q:'那個還沒有答案的問題，你想用什麼方式帶著它？'}
+};
+const PATTERN_ORDER = ['light','act','heart','loop','carry'];
+
+/* what each choice says about how the player met the problem */
+const KIND = {
+  '寄信給授課老師，問能不能加簽':'act', '到系辦問問看':'act', '問共同朋友阿凱':'act',
+  '寫信問公司能不能改時間，或改成線上':'act', '請住附近的阿姨那天陪媽媽':'act', '問媽媽希望誰陪她去':'act',
+  '打開雲端，看有沒有自動備份':'act', '傳訊息問組員有沒有副本':'act', '再問媽媽一次，她真正的想法':'act',
+  '一直刷新頁面，等有人退選':'loop', '開始想延畢要怎麼跟家裡說':'loop', '重讀一次自己的道歉':'loop',
+  '重讀自己的道歉':'loop', '寫第二則訊息':'loop', '看他最後上線的時間':'loop', '直接再傳一則':'loop',
+  '想：是不是老天在叫我別去':'loop', '拔掉隨身碟，重插一次':'loop', '開始想像上台出糗的畫面':'loop',
+  '想像最壞的情況':'loop', '怪自己為什麼偏偏在這時候':'loop',
+  '先去洗澡、睡覺':'rest', '叫自己去睡覺':'rest'
+};
+
+function runStats(list){
+  const all=list.flatMap(r=>r.path);
+  const count=k=>all.filter(t=>KIND[t]===k).length;
+  const peaks=list.map(peak);
+  const solved=list.filter(r=>r.ending==='B'), open=list.filter(r=>r.ending!=='B');
+  return {
+    n:list.length, peaks, avg:peaks.reduce((a,b)=>a+b,0)/peaks.length,
+    light:peaks.filter(p=>p<=2).length, heavy:peaks.filter(p=>p>=4).length,
+    act:count('act'), loop:count('loop'), rest:count('rest'),
+    solved, open,
+    dropped:solved.filter(r=>lastW(r)<=peak(r)-2),
+    stayed:open.filter(r=>lastW(r)>=3),
+    rising:list.filter(r=>r.ratings.length>2 && lastW(r)>r.ratings[0])
+  };
+}
+function patternsOf(list){
+  const s=runStats(list), fit=[];
+  if(s.avg<=2.5 && s.light/s.n>=.6) fit.push('light');
+  if((s.loop>=3 && s.loop>s.act) || (s.rising.length>=2 && s.loop>=2)) fit.push('loop');
+  if((s.act>=3 && s.act>=s.loop*2) || (s.act>=2 && s.act>=s.loop && s.dropped.length)) fit.push('act');
+  if(s.avg>=3.8) fit.push('heart');
+  if(s.dropped.length && s.stayed.length) fit.push('carry');
+  if(!fit.length) fit.push('carry');
+  return {main:fit[0], also:fit[1]||null, s};
+}
+/* evidence comes only from what the player did */
+function evidence(key, s){
+  const lines={
+    light: s.light ? `${s.n} 章裡，有 ${s.light} 章最重的時候也只到 2 以下。` : '',
+    heavy: s.heavy ? `${s.n} 章裡，有 ${s.heavy} 章曾經重到 4 以上。` : '',
+    act: s.act ? `遇到問題時，你有 ${s.act} 次選擇直接去問、去做。` : '',
+    loop: s.loop ? `你有 ${s.loop} 次選了重讀、查看，或往壞處想。` : '',
+    drop: s.dropped.length ? `「${s.dropped[0].title}」解決後，重量從 ${peak(s.dropped[0])} 降到 ${lastW(s.dropped[0])}。` : '',
+    stay: s.stayed.length ? `還沒有答案的問題，最後停在 ${span(s.stayed.map(lastW))}。` : '',
+    rise: s.rising.length ? `「${s.rising[0].title}」越繞越重，從 ${s.rising[0].ratings[0]} 到 ${lastW(s.rising[0])}。` : ''
+  };
+  const order={light:['light','drop','stay'], act:['act','drop','stay'], heart:['heavy','drop','stay'],
+               loop:['loop','rise','stay'], carry:['drop','stay','act']}[key];
+  return order.map(k=>lines[k]).filter(Boolean).slice(0,3);
+}
+
+function patternCard(p){
+  const P=PATTERNS[p.main];
+  const c=el('div','card pattern');
+  /* name and evidence on the left, the figure standing beside them */
+  const top=el('div','pat-top'), left=el('div','pat-left');
+  const t=el('div','pat-title'); t.append(el('span','pat-k','這一次，你比較像'), el('strong','pat-name',esc(P.name).replace('，','，<br>')));
+  left.append(t);
+  const ev=evidence(p.main,p.s);
+  if(ev.length){ const ul=el('ul','pat-ev'); ev.forEach(x=>ul.append(el('li','',esc(x)))); left.append(ul); }
+  top.append(left, artImg('pat-'+p.main,'pat-face')); c.append(top);
+  const g=el('div','pat-two');
+  const a=el('div',''); a.append(el('span','pat-h','這樣的你'), el('p','',esc(P.good)));
+  const b=el('div',''); b.append(el('span','pat-h','可以留意的'), el('p','',esc(P.watch)));
+  g.append(a,b); c.append(g);
+  if(p.also) c.append(el('p','pat-also',`同時，你也有一點「${esc(PATTERNS[p.also].name)}」。`));
+  const q=el('div','pat-q'); q.append(el('span','',`留給自己的問題`), el('p','',esc(P.q))); c.append(q);
+  c.append(el('p','fine','這是你這一次走過的樣子，不是你是哪一種人。換個心情再走一次，可能會不一樣。'));
+  return c;
+}
+
+/* 你並不孤單
+   收集到同學的回答後，把每一份回答最後的「這一次的樣子」數一數，填在這裡。
+   total 是走過的人數；少於 3 人時，這一區不會出現。 */
+const PEERS = { total: 0, light: 0, act: 0, heart: 0, loop: 0, carry: 0 };
+function peersCard(p){
+  if(PEERS.total<3) return null;
+  const k=PEERS[p.main]||0;
+  const c=el('div','card peers');
+  c.append(el('h3','','你並不孤單'));
+  c.append(el('p','peers-line', k
+    ? `到目前為止，有 ${PEERS.total} 個人走過這個學期。其中 ${k} 個人，這一次也是「${esc(PATTERNS[p.main].name)}」。`
+    : `到目前為止，有 ${PEERS.total} 個人走過這個學期。走成「${esc(PATTERNS[p.main].name)}」的，你是第一個。`));
+  const bars=el('div','peer-bars');
+  PATTERN_ORDER.forEach(key=>{
+    const v=PEERS[key]||0, row=el('div','peer-row'+(key===p.main?' me':''));
+    row.append(el('span','pr-name',esc(PATTERNS[key].name)));
+    const bar=el('span','pr-bar'); const fill=el('i'); fill.style.width=(PEERS.total? v/PEERS.total*100 : 0)+'%'; bar.append(fill);
+    row.append(bar, el('span','pr-n',`${v} 人`));
+    bars.append(row);
+  });
+  c.append(bars);
+  return c;
+}
+
 function momCard(){
   const ms=results.filter(r=>r.mom && r.ending!=='S');
   if(!ms.length) return null;
   const c=el('div','card thread');
-  const h=el('div','card-head'); h.append(el('h3','',`反覆出現的問題：「${PIN_MOM}」`)); { const ch=el('span','chip dash',`出現 ${ms.length} 次`); ch.prepend(artImg('tangle')); h.append(ch); } c.append(h);
-  c.append(el('p','meta','同一個問題，在九月、十一月、一月回來，一次比一次大。每一次，你身邊的情況、你考慮的事，和你放下它的理由都不一樣。'));
-  const all=[], breaks=[];
-  ms.forEach((m,i)=>{ if(i) breaks.push(all.length); all.push(...m.ratings); });
-  c.insertAdjacentHTML('beforeend', curve(all, breaks));
+  c.append(el('h3','',`一直回來的問題：「${PIN_MOM}」`));
+  c.append(el('p','meta','九月第一次出現，之後又回來了。每一次，你放下它的理由都不一樣。'));
   const list=el('div','times');
   ms.forEach(m=>{
     const t=el('div','time');
-    t.append(el('span','when',`第 ${m.mom} 次・${m.month}`));
-    t.append(el('p','meta',`心裡的重量：${m.ratings.join(' → ')}`));
-    const cnt=new Map(); m.path.filter(p=>p!==m.reason).forEach(p=>cnt.set(p,(cnt.get(p)||0)+1));
-    const considered=[...cnt].map(([p,k])=> k>1 ? `${p}（${k} 次）` : p);
-    if(considered.length) t.append(el('p','',`你想過的：${esc(considered.join('、'))}`));
+    t.append(el('span','when',`${m.month}・重量 ${m.ratings.join(' → ')}`));
     if(m.reason) t.append(el('p','quote','「'+esc(m.reason)+'」'));
     list.append(t);
   });
@@ -848,57 +1077,108 @@ function momCard(){
   return c;
 }
 
-function showResults(){
-  const w=$('#resultWrap'); w.replaceChildren();
-  const head=el('div'); head.style.display='grid'; head.style.gap='10px';
-  head.append(el('p','fine','社會情緒訓練'));
-  head.append(el('h1','','這是你這一個學期走過的路。'));
-  head.append(el('p','lead','這裡只呈現你在每一章停在哪裡、繞了幾圈，還有你自己說的理由。'));
-  w.append(head);
+function othersCard(){
+  if(!OTHERS_SAID.length) return null;
+  const c=el('div','card');
+  c.append(el('h3','','其他人寫下的話'));
+  const box=el('div','said');
+  shuffle(OTHERS_SAID).slice(0,6).forEach(o=>{
+    const q=el('p','quote'); if(o.ch) q.append(el('small','',o.ch)); q.append(document.createTextNode('「'+o.t+'」')); box.append(q);
+  });
+  c.append(box);
+  return c;
+}
 
-  const mc=momCard(); if(mc) w.append(mc);
+function summaryText(){
+  const lines=['社會情緒訓練｜我的回答'];
+  const pl=played(); if(pl.length) lines.push('這一次的樣子：'+PATTERNS[patternsOf(pl).main].name);
+  results.forEach(r=>{
+    if(r.ending==='S'){ lines.push(`${label(r)}：略過`); return; }
+    const bits=[`重量 ${r.ratings.join('→')}`];
+    if(r.cope) bits.push(COPE[r.cope]);
+    if(r.path.length) bits.push('選了：'+r.path.join('、'));
+    if(r.reason) bits.push('停下來的理由：「'+r.reason+'」');
+    lines.push(`${label(r)}｜${bits.join('｜')}`);
+  });
+  return lines.join('\n');
+}
+function shareCard(){
+  const c=el('div','card share');
+  c.append(el('h3','','把你的回答傳給作者'));
+  c.append(el('p','meta','複製後可以貼到訊息裡。你寫下的理由，之後可能會匿名出現在「其他人寫下的話」。不想分享也沒關係。'));
+  const ta=el('textarea'); ta.id='shareText'; ta.readOnly=true; ta.value=summaryText(); ta.hidden=true; ta.setAttribute('aria-label','你的回答');
+  const b=el('button','copy','複製我的回答'); b.type='button';
+  const msg=el('span','meta'); msg.setAttribute('aria-live','polite');
+  b.onclick=()=>{
+    const fallback=()=>{ ta.hidden=false; ta.focus(); ta.select(); msg.textContent='請手動複製上面的文字。'; };
+    try{ navigator.clipboard.writeText(ta.value).then(()=>{ msg.textContent='已複製。'; }, fallback); }catch(e){ fallback(); }
+  };
+  const row=el('div','share-row'); row.append(b, msg);
+  c.append(ta, row);
+  return c;
+}
 
+function detailCards(){
+  const det=el('details','each'); det.append(el('summary','','每一章的細節'));
   const cards=el('div','cards');
   results.forEach(r=>{
     const c=el('div','card');
-    const h=el('div','card-head'); h.append(el('h3','',`${esc(r.month)}・${esc(r.title)}`));
-    const [label, cls] = ENDING[r.ending]; const chip=el('span','chip'+(cls?' '+cls:''),label);
-    const mk={B:'circle', T:'tangle', M:'tangle'}[r.ending]; if(mk) chip.prepend(artImg(mk));
-    h.append(chip);
-    c.append(h);
+    const h=el('div','card-head'); h.append(el('h3','',esc(label(r))));
+    const [lb, cls] = ENDING[r.ending]; h.append(el('span','chip'+(cls?' '+cls:''),lb)); c.append(h);
     if(r.ending==='E'){ c.append(el('p','meta',`最後的重量：${r.ratings.join(' → ')}`)); cards.append(c); return; }
     if(r.ending==='S'){ c.append(el('p','meta', r.mom ? '你選擇略過「去，還是留下？」這條線。' : '你選擇略過這一章。')); cards.append(c); return; }
-    const parts=[];
-    if(r.mom) parts.push(`這個問題第 ${r.mom} 次出現`);
-    if(r.loops) parts.push(`繞了 ${r.loops} 圈`);
-    parts.push(`心裡的重量：${r.ratings.join(' → ')}`);
+    const parts=[`重量：${r.ratings.join(' → ')}`];
+    if(r.cope) parts.push(`一開始覺得：${COPE[r.cope]}`);
     c.append(el('p','meta',parts.join('　')));
-    c.insertAdjacentHTML('beforeend', curve(r.ratings));
     const ol=el('ol','path'); r.path.forEach(t=>ol.append(el('li','',esc(t)))); c.append(ol);
     if(r.reason){ const q=el('p','quote'); q.append(el('small','','你停下來的理由')); q.append(document.createTextNode('「'+r.reason+'」')); c.append(q); }
     if(r.reveal) c.append(el('p','reveal','後來才知道：'+esc(r.reveal)));
     cards.append(c);
   });
-  w.append(cards);
+  det.append(cards);
+  return det;
+}
+
+function showResults(){
+  const w=$('#resultWrap'); w.replaceChildren();
+  const head=el('div'); head.style.display='grid'; head.style.gap='10px';
+  head.append(el('p','fine','社會情緒訓練'));
+  head.append(el('h1','','這是你這一個學期走過的路。'));
+  head.append(el('p','lead','這裡只整理你自己給的答案，不替你下結論。'));
+  w.append(head);
+
+  const list=played();
+  if(list.length){
+    const pat=patternsOf(list);
+    w.append(patternCard(pat));
+    const pc=peersCard(pat); if(pc) w.append(pc);
+    w.append(zoneCard(list)); w.append(weightCard(list));
+  }
+  const mc=momCard(); if(mc) w.append(mc);
+  const oc=othersCard(); if(oc) w.append(oc);
 
   const fin=el('div','finale'); fin.setAttribute('aria-hidden','true');
   fin.append(artImg('circle','f-circle drawn'), artImg('figure-a','f-a'), artImg('figure-b','f-b'));
   w.append(fin);
   w.append(el('p','close','有些問題過去了，有些問題你帶著走。<br>它還會回來，回來的時候，你也不是原來的你了。'));
 
+  const more=el('div','more');
+  more.append(detailCards());
   const det=el('details'); det.append(el('summary','','這件作品參考的研究'));
   const ul=el('ul');
   [
     'Martin 與 Tesser（1996）：反芻會在目標達成，或目標被放下時停止。',
-    'Masicampo 與 Baumeister（2011）：替未完成的事訂下具體計畫，就能減少它帶來的干擾念頭。',
-    'Watkins（2008）：抽象地追問「為什麼」的反芻，比具體地想「怎麼辦」更容易讓人困住。',
-    'Lazarus 與 Folkman（1984）：人怎麼面對問題，取決於他如何判斷這件事能不能控制；同一件事，在不同時間點的判斷也會不同。'
+    'Watkins（2008）：抽象地追問「為什麼」，比具體地想「怎麼辦」更容易讓人困住。',
+    'Lazarus 與 Folkman（1984）：人會先判斷一件事有多重要，再判斷自己處理不處理得來。結果頁的四個位置就是用這兩步整理的。',
+    '渡邊淳一（2007）《鈍感力》：不被每件小事拉住，也是一種讓生活走得下去的能力。'
   ].forEach(t=>ul.append(el('li','',esc(t))));
-  det.append(ul); w.append(det);
+  det.append(ul); more.append(det);
+  w.append(more);
 
+  w.append(shareCard());
   const again=el('button','btn','再走一次'); again.type='button'; again.onclick=()=>{ show('intro'); $('#intro').scrollTop=0; $('#intro').classList.add('go'); };
   w.append(again);
-  w.append(el('p','fine','「已讀的道歉」裡對方會不會回是隨機的，它也會影響故事的結尾。這是一件互動作品，不是心理測驗或診斷。如果有某個問題已經困住你很久，找信任的人或諮商師聊聊會有幫助。'));
+  w.append(el('p','fine','「已讀的道歉」裡對方會不會回是隨機的。這是一件互動作品，不是心理測驗或診斷。如果有某個問題已經困住你很久，找信任的人或諮商師聊聊會有幫助。'));
   show('resultScreen'); $('#resultScreen').scrollTop=0;
 }
 
@@ -907,18 +1187,12 @@ $('#startSkipBtn').onclick = ()=>runAll(true);
 
 /* opening film, then the original intro screen */
 (function(){
-  const film=$('#film'), v=$('#filmVideo'), playBtn=$('#filmPlay'), startFilm=$('#filmStart');
+  const film=$('#film'), v=$('#filmVideo');
   let done=false;
-  /* film over (ended, skipped or failed): hold on the last frame and offer a centred start button */
+  /* film over (ended, skipped or failed): fade away to reveal the prologue */
   const finish=()=>{
     if(done) return; done=true;
     v.pause();
-    playBtn.hidden=true; $('#filmSkip').hidden=true;
-    startFilm.hidden=false; startFilm.focus({preventScroll:true});
-  };
-  /* start: fade the film away to reveal the prologue screen, whose 下一頁 runs the original flow */
-  startFilm.onclick=()=>{
-    startFilm.hidden=true;
     film.classList.add('out');
     setTimeout(()=>{ film.hidden=true; }, RM ? 0 : 800);
     $('#intro').scrollTop=0; $('#intro').classList.add('go');
@@ -927,9 +1201,8 @@ $('#startSkipBtn').onclick = ()=>runAll(true);
   v.addEventListener('ended', finish);
   v.addEventListener('error', finish);
   $('#filmSkip').onclick=finish;
-  playBtn.onclick=()=>{ playBtn.hidden=true; v.play().catch(finish); };
   const p=v.play();
-  if(p && p.catch) p.catch(()=>{ playBtn.hidden=false; });
+  if(p && p.catch) p.catch(finish); /* autoplay blocked: go straight to the prologue */
 })();
 
 </script>
